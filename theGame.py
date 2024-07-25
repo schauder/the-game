@@ -1,4 +1,22 @@
 from random import shuffle
+from enum import Enum
+
+
+class DiscardPile:
+    def __init__(self, direction):
+        self.direction = direction
+        self.last = 1 if direction == Direction.INCREASING else 100
+
+    def __str__(self):
+        return self.direction.name + " " + str(self.last)
+
+    def __repr__(self):
+        return str(self)
+
+
+class Direction(Enum):
+    INCREASING = 1
+    DECREASING = -1
 
 
 def calculate_number_of_cards_per_player(number_of_players):
@@ -19,17 +37,16 @@ def read_number_of_players():
 
 
 def draw_hands(deck):
-    hands = []
+    result = []
     for playerIndex in range(0, numberOfPlayers):
-        hands.append(deck[-numberOfCards:])
+        result.append(deck[-numberOfCards:])
         for cardIndex in range(0, numberOfCards):
             deck.pop(len(deck) - 1)
-    return hands
+    return result
 
 
-# TODO: This should go into a discard pile class
-discardPiles = [1, 1, 100, 100]
-directions = [1, 1, -1, -1]
+discardPiles = [DiscardPile(Direction.INCREASING), DiscardPile(Direction.INCREASING), DiscardPile(Direction.DECREASING),
+                DiscardPile(Direction.DECREASING)]
 
 # TODO: This should go into a draw pile class
 cards = list(range(2, 100))
@@ -41,9 +58,8 @@ numberOfCards = calculate_number_of_cards_per_player(numberOfPlayers)
 
 hands = draw_hands(cards)
 
-print("discard piles" + discardPiles.__str__())
-print("directions: " + directions.__str__())
-print("cards: " + cards.__str__())
-print("numberOfPlayers: " + numberOfPlayers.__str__())
-print("numberOfCards: " + numberOfCards.__str__())
-print("hands: " + hands.__str__())
+print("discard piles: " + str(discardPiles))
+print("cards: " + str(cards))
+print("numberOfPlayers: " + str(numberOfPlayers))
+print("numberOfCards: " + str(numberOfCards))
+print("hands: " + str(hands))
