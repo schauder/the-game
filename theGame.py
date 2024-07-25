@@ -18,6 +18,15 @@ def read_number_of_players():
     return number_of_players
 
 
+def draw_hands(deck):
+    hands = []
+    for playerIndex in range(0, numberOfPlayers):
+        hands.append(deck[-numberOfCards:])
+        for cardIndex in range(0, numberOfCards):
+            deck.pop(len(deck) - 1)
+    return hands
+
+
 # TODO: This should go into a discard pile class
 discardPiles = [1, 1, 100, 100]
 directions = [1, 1, -1, -1]
@@ -30,10 +39,7 @@ numberOfPlayers = read_number_of_players()
 
 numberOfCards = calculate_number_of_cards_per_player(numberOfPlayers)
 
-hands = []
-for playerIndex in range(0, numberOfPlayers):
-    hands.append(cards[-numberOfCards:])
-    cards = cards[:-numberOfCards]
+hands = draw_hands(cards)
 
 print("discard piles" + discardPiles.__str__())
 print("directions: " + directions.__str__())
