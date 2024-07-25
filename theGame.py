@@ -1,5 +1,23 @@
 from random import shuffle
 
+
+def calculate_number_of_cards_per_player(number_of_players):
+    if number_of_players == 1:
+        return 8
+    if number_of_players == 2:
+        return 7
+    return 6
+
+
+def read_number_of_players():
+    valid = False
+    number_of_players = None
+    while not valid:
+        number_of_players = int(input("Give me the number of players between 1 and 5: "))
+        valid = 1 <= number_of_players <= 5
+    return number_of_players
+
+
 # TODO: This should go into a discard pile class
 discardPiles = [1, 1, 100, 100]
 directions = [1, 1, -1, -1]
@@ -8,16 +26,9 @@ directions = [1, 1, -1, -1]
 cards = list(range(2, 100))
 shuffle(cards)
 
-validInput = False
-numberOfPlayers = None
-while not validInput:
-    numberOfPlayers = int(input("Give me the number of players between 2 and 5: "))
-    validInput = numberOfPlayers >= 2 and numberOfPlayers <= 5
+numberOfPlayers = read_number_of_players()
 
-# print cards before drawing
-print("cards before drawing: " + cards.__str__())
-
-numberOfCards = 6
+numberOfCards = calculate_number_of_cards_per_player(numberOfPlayers)
 
 hands = []
 for playerIndex in range(0, numberOfPlayers):
@@ -30,4 +41,3 @@ print("cards: " + cards.__str__())
 print("numberOfPlayers: " + numberOfPlayers.__str__())
 print("numberOfCards: " + numberOfCards.__str__())
 print("hands: " + hands.__str__())
-
