@@ -48,7 +48,6 @@ def draw_hands(deck):
 discardPiles = [DiscardPile(Direction.INCREASING), DiscardPile(Direction.INCREASING), DiscardPile(Direction.DECREASING),
                 DiscardPile(Direction.DECREASING)]
 
-# TODO: This should go into a draw pile class
 cards = list(range(2, 100))
 shuffle(cards)
 
