@@ -24,6 +24,7 @@ class FixedSetupSource(SetupSource):
     def read_number_of_players(self):
         return self.value
 
+
 class DiscardPile:
     def __init__(self, direction):
         self.direction = direction
@@ -39,7 +40,6 @@ class DiscardPile:
 class Direction(Enum):
     INCREASING = 1
     DECREASING = -1
-
 
 
 class Game:
@@ -60,7 +60,8 @@ class Game:
                     deck.pop(len(deck) - 1)
             return result
 
-        discardPiles = [DiscardPile(Direction.INCREASING), DiscardPile(Direction.INCREASING), DiscardPile(Direction.DECREASING),
+        discardPiles = [DiscardPile(Direction.INCREASING), DiscardPile(Direction.INCREASING),
+                        DiscardPile(Direction.DECREASING),
                         DiscardPile(Direction.DECREASING)]
 
         cards = list(range(2, 100))
@@ -77,6 +78,3 @@ class Game:
         print("numberOfPlayers: " + str(numberOfPlayers))
         print("numberOfCards: " + str(numberOfCards))
         print("hands: " + str(hands))
-
-
-Game().start()
