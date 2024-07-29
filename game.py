@@ -63,8 +63,8 @@ def draw_hands(deck, number_of_players, cards):
 
 def start(setup_source=StdinSetupSource()):
     discard_piles = [DiscardPile(Direction.INCREASING), DiscardPile(Direction.INCREASING),
-                    DiscardPile(Direction.DECREASING),
-                    DiscardPile(Direction.DECREASING)]
+                     DiscardPile(Direction.DECREASING),
+                     DiscardPile(Direction.DECREASING)]
 
     cards = list(range(2, 100))
     shuffle(cards)
