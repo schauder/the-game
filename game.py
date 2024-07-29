@@ -1,6 +1,8 @@
 from random import shuffle
 from enum import Enum
 
+import numbers
+
 
 class SetupSource:
     def read_number_of_players(self):
@@ -9,11 +11,11 @@ class SetupSource:
 
 class StdinSetupSource(SetupSource):
     def read_number_of_players(self):
-        valid = False
         number_of_players = None
-        while not valid:
-            number_of_players = int(input("Give me the number of players between 1 and 5: "))
-            valid = 1 <= number_of_players <= 5
+        while number_of_players == None:
+            number_of_players = numbers.safe_convert_to_int(input("Give me the number of players between 1 and 5: "))
+            if (number_of_players == None or  number_of_players < 1 or number_of_players > 5):
+                number_of_players = None
         return number_of_players
 
 
