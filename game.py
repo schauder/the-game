@@ -12,9 +12,9 @@ class SetupSource:
 class StdinSetupSource(SetupSource):
     def read_number_of_players(self):
         number_of_players = None
-        while number_of_players == None:
+        while number_of_players is None:
             number_of_players = numbers.safe_convert_to_int(input("Give me the number of players between 1 and 5: "))
-            if (number_of_players == None or  number_of_players < 1 or number_of_players > 5):
+            if number_of_players is None or number_of_players < 1 or number_of_players > 5:
                 number_of_players = None
         return number_of_players
 
