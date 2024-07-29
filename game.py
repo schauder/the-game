@@ -44,39 +44,43 @@ class Direction(Enum):
     DECREASING = -1
 
 
+def calculate_number_of_cards_per_player(number_of_players):
+    if number_of_players == 1:
+        return 8
+    if number_of_players == 2:
+        return 7
+    return 6
+
+
+def draw_hands(deck, number_of_players, cards):
+    result = []
+    for playerIndex in range(0, number_of_players):
+        result.append(deck[-cards:])
+        for cardIndex in range(0, number_of_players):
+            deck.pop(len(deck) - 1)
+    return result
+
+
+def start(setup_source=StdinSetupSource()):
+    discard_piles = [DiscardPile(Direction.INCREASING), DiscardPile(Direction.INCREASING),
+                    DiscardPile(Direction.DECREASING),
+                    DiscardPile(Direction.DECREASING)]
+
+    cards = list(range(2, 100))
+    shuffle(cards)
+
+    number_of_players = setup_source.read_number_of_players()
+
+    number_of_cards = calculate_number_of_cards_per_player(number_of_players)
+
+    hands = draw_hands(cards, number_of_players, number_of_cards)
+
+    print("discard piles: " + str(discard_piles))
+    print("cards: " + str(cards))
+    print("numberOfPlayers: " + str(number_of_players))
+    print("number_of_cards: " + str(number_of_cards))
+    print("hands: " + str(hands))
+
+
 class Game:
-    def start(self, setupSource=StdinSetupSource()):
-
-        def calculate_number_of_cards_per_player(number_of_players):
-            if number_of_players == 1:
-                return 8
-            if number_of_players == 2:
-                return 7
-            return 6
-
-        def draw_hands(deck, number_of_players):
-            result = []
-            for playerIndex in range(0, number_of_players):
-                result.append(deck[-numberOfCards:])
-                for cardIndex in range(0, number_of_players):
-                    deck.pop(len(deck) - 1)
-            return result
-
-        discardPiles = [DiscardPile(Direction.INCREASING), DiscardPile(Direction.INCREASING),
-                        DiscardPile(Direction.DECREASING),
-                        DiscardPile(Direction.DECREASING)]
-
-        cards = list(range(2, 100))
-        shuffle(cards)
-
-        numberOfPlayers = setupSource.read_number_of_players()
-
-        numberOfCards = calculate_number_of_cards_per_player(numberOfPlayers)
-
-        hands = draw_hands(cards, numberOfPlayers)
-
-        print("discard piles: " + str(discardPiles))
-        print("cards: " + str(cards))
-        print("numberOfPlayers: " + str(numberOfPlayers))
-        print("numberOfCards: " + str(numberOfCards))
-        print("hands: " + str(hands))
+    pass

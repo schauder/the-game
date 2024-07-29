@@ -1,3 +1,3 @@
-from game import Game
+from game import start
 
-Game().start()
+start()
