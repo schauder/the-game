@@ -19,6 +19,10 @@ class StdinSetupSource(SetupSource):
         return number_of_players
 
 
+class Player:
+    pass
+
+
 class FixedSetupSource(SetupSource):
     def __init__(self, value=None):
         self.value = value
@@ -52,35 +56,33 @@ def calculate_number_of_cards_per_player(number_of_players):
     return 6
 
 
-def draw_hands(deck, number_of_players, cards):
-    result = []
-    for playerIndex in range(0, number_of_players):
-        result.append(deck[-cards:])
-        for cardIndex in range(0, number_of_players):
-            deck.pop(len(deck) - 1)
-    return result
-
-
-def start(setup_source=StdinSetupSource()):
-    discard_piles = [DiscardPile(Direction.INCREASING), DiscardPile(Direction.INCREASING),
-                     DiscardPile(Direction.DECREASING),
-                     DiscardPile(Direction.DECREASING)]
-
+class Game:
     cards = list(range(2, 100))
     shuffle(cards)
 
-    number_of_players = setup_source.read_number_of_players()
+    def draw_hands(self, number_of_hand_cards):
+        result = []
+        for playerIndex in range(0, number_of_hand_cards):
+            result.append(self.cards[-number_of_hand_cards:])
+            for cardIndex in range(0, number_of_hand_cards):
+                self.cards.pop(len(self.cards) - 1)
+        return result
 
-    number_of_cards = calculate_number_of_cards_per_player(number_of_players)
+    def __init__(self, players):
+        self.players = players
 
-    hands = draw_hands(cards, number_of_players, number_of_cards)
+        self.discard_piles = [DiscardPile(Direction.INCREASING), DiscardPile(Direction.INCREASING),
+                              DiscardPile(Direction.DECREASING),
+                              DiscardPile(Direction.DECREASING)]
 
-    print("discard piles: " + str(discard_piles))
-    print("cards: " + str(cards))
-    print("numberOfPlayers: " + str(number_of_players))
-    print("number_of_cards: " + str(number_of_cards))
-    print("hands: " + str(hands))
+        number_of_players = len(self.players)
 
+        number_of_cards = calculate_number_of_cards_per_player(number_of_players)
 
-class Game:
-    pass
+        hands = self.draw_hands(number_of_cards)
+
+        print("discard piles: " + str(self.discard_piles))
+        print("cards: " + str(self.cards))
+        print("numberOfPlayers: " + str(number_of_players))
+        print("number_of_cards: " + str(number_of_cards))
+        print("hands: " + str(hands))

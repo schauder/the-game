@@ -1,3 +1,3 @@
-from game import start
+from game import Player, Game
 
-start()
+Game([Player(), Player(), Player(), Player])
