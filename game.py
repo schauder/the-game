@@ -20,7 +20,14 @@ class StdinSetupSource(SetupSource):
 
 
 class Player:
-    pass
+    def __init__(self, name):
+        self.name = name
+
+    def __str__(self):
+        return "Player: " + self.name
+
+    def __repr__(self):
+        return self.__str__()
 
 
 class FixedSetupSource(SetupSource):
@@ -61,11 +68,10 @@ class Game:
     shuffle(cards)
 
     def draw_hands(self, number_of_hand_cards):
-        result = []
-        for playerIndex in range(0, number_of_hand_cards):
-            result.append(self.cards[-number_of_hand_cards:])
-            for cardIndex in range(0, number_of_hand_cards):
-                self.cards.pop(len(self.cards) - 1)
+        result = {}
+        for player in self.players:
+            result[player] = self.cards[-number_of_hand_cards:]
+            del self.cards[-number_of_hand_cards:]
         return result
 
     def __init__(self, players):
@@ -86,3 +92,4 @@ class Game:
         print("numberOfPlayers: " + str(number_of_players))
         print("number_of_cards: " + str(number_of_cards))
         print("hands: " + str(hands))
+        print("players: " + str(self.players))
