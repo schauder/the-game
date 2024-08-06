@@ -29,6 +29,9 @@ class Player:
     def __repr__(self):
         return self.__str__()
 
+    def make_move(self, hand, piles):
+        print(str(hand))
+        print(str(piles))
 
 class FixedSetupSource(SetupSource):
     def __init__(self, value=None):
@@ -42,6 +45,18 @@ class DiscardPile:
     def __init__(self, direction):
         self.direction = direction
         self.last = 1 if direction == Direction.INCREASING else 100
+
+    def __str__(self):
+        return self.direction.name + " " + str(self.last)
+
+    def __repr__(self):
+        return str(self)
+
+
+class DiscardPileView:
+    def __init__(self, direction, last):
+        self.direction = direction
+        self.last = last
 
     def __str__(self):
         return self.direction.name + " " + str(self.last)
@@ -66,6 +81,7 @@ def calculate_number_of_cards_per_player(number_of_players):
 class Game:
     cards = list(range(2, 100))
     shuffle(cards)
+    hands = {}
 
     def draw_hands(self, number_of_hand_cards):
         result = {}
@@ -87,9 +103,21 @@ class Game:
 
         hands = self.draw_hands(number_of_cards)
 
+        for player in self.players:
+            self.make_move(player)
+
         print("discard piles: " + str(self.discard_piles))
         print("cards: " + str(self.cards))
         print("numberOfPlayers: " + str(number_of_players))
         print("number_of_cards: " + str(number_of_cards))
         print("hands: " + str(hands))
         print("players: " + str(self.players))
+
+    def make_move(self, player):
+        player.make_move(self.hands[player], self.view_of_discard_piles())
+
+    def view_of_discard_piles(self):
+        result = []
+        for pile in self.discard_piles:
+            result.append(DiscardPileView(pile.direction, pile.last))
+        return result
