@@ -19,8 +19,19 @@ class StdinSetupSource(SetupSource):
         return number_of_players
 
 
+class SingleMove:
+    def __init__(self,  card: int, pile: int):
+        self.card = card
+        self.pile = pile
+
+
+class PlayerMove:
+    def __init__(self, moves: [SingleMove]):
+        self.moves = moves
+
+
 class Player:
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
 
     def __str__(self):
@@ -29,9 +40,12 @@ class Player:
     def __repr__(self):
         return self.__str__()
 
-    def make_move(self, hand, piles):
+    def make_move(self, hand, piles) -> PlayerMove:
+        print("Making a move for " + self.name)
         print(str(hand))
         print(str(piles))
+        return PlayerMove([SingleMove(0, 0), SingleMove(1, 0)])
+
 
 class FixedSetupSource(SetupSource):
     def __init__(self, value=None):
@@ -41,8 +55,13 @@ class FixedSetupSource(SetupSource):
         return self.value
 
 
+class Direction(Enum):
+    INCREASING = 1
+    DECREASING = -1
+
+
 class DiscardPile:
-    def __init__(self, direction):
+    def __init__(self, direction: Direction):
         self.direction = direction
         self.last = 1 if direction == Direction.INCREASING else 100
 
@@ -54,20 +73,15 @@ class DiscardPile:
 
 
 class DiscardPileView:
-    def __init__(self, direction, last):
-        self.direction = direction
-        self.last = last
+    def __init__(self, direction: Direction, last: int):
+        self.direction: Direction = direction
+        self.last: int = last
 
     def __str__(self):
         return self.direction.name + " " + str(self.last)
 
     def __repr__(self):
         return str(self)
-
-
-class Direction(Enum):
-    INCREASING = 1
-    DECREASING = -1
 
 
 def calculate_number_of_cards_per_player(number_of_players):
@@ -90,6 +104,17 @@ class Game:
             del self.cards[-number_of_hand_cards:]
         return result
 
+    def process(self, player: Player, move: PlayerMove):
+        # check no cards a played multiple times
+
+        # check only available cards are played
+        # check cards are legal to play on pile
+        print(move)
+
+    def make_move(self, player: Player):
+        move = player.make_move(self.hands[player], self.view_of_discard_piles())
+        self.process(player, move)
+
     def __init__(self, players):
         self.players = players
 
@@ -101,7 +126,7 @@ class Game:
 
         number_of_cards = calculate_number_of_cards_per_player(number_of_players)
 
-        hands = self.draw_hands(number_of_cards)
+        self.hands = self.draw_hands(number_of_cards)
 
         for player in self.players:
             self.make_move(player)
@@ -110,11 +135,8 @@ class Game:
         print("cards: " + str(self.cards))
         print("numberOfPlayers: " + str(number_of_players))
         print("number_of_cards: " + str(number_of_cards))
-        print("hands: " + str(hands))
+        print("hands: " + str(self.hands))
         print("players: " + str(self.players))
-
-    def make_move(self, player):
-        player.make_move(self.hands[player], self.view_of_discard_piles())
 
     def view_of_discard_piles(self):
         result = []
