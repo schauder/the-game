@@ -105,7 +105,12 @@ class Game:
         return result
 
     def process(self, player: Player, move: PlayerMove):
+
+        def card(m: SingleMove):
+            return m.card
+
         # check no cards a played multiple times
+        assert len(set(map(card, move.moves))) == len(move.moves)
 
         # check only available cards are played
         # check cards are legal to play on pile
