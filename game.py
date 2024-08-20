@@ -1,7 +1,7 @@
 from random import shuffle
 from enum import Enum
 
-import numbers
+import inputconverters
 
 
 class SetupSource:
@@ -44,7 +44,7 @@ class Player:
         print("Making a move for " + self.name)
         print(str(hand))
         print(str(piles))
-        return PlayerMove([SingleMove(0, 0), SingleMove(1, 0)])
+        return PlayerMove([SingleMove(2, 0), SingleMove(1, 0)])
 
 
 class FixedSetupSource(SetupSource):
@@ -109,10 +109,15 @@ class Game:
         def card(m: SingleMove):
             return m.card
 
-        # check no cards a played multiple times
-        assert len(set(map(card, move.moves))) == len(move.moves)
+        # check no cards are played multiple times
+        used_cards = set(map(card, move.moves))
+        assert len(used_cards) == len(move.moves)
 
         # check only available cards are played
+        hand_size = len(self.hands[player])
+        legal_cards = set(filter(lambda c: 0 <= c < hand_size, used_cards))
+        assert len(legal_cards) == len(used_cards)
+
         # check cards are legal to play on pile
         print(move)
 
