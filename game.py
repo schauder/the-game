@@ -8,17 +8,6 @@ class SetupSource:
     def read_number_of_players(self):
         pass
 
-
-class StdinSetupSource(SetupSource):
-    def read_number_of_players(self):
-        number_of_players = None
-        while number_of_players is None:
-            number_of_players = numbers.safe_convert_to_int(input("Give me the number of players between 1 and 5: "))
-            if number_of_players is None or number_of_players < 1 or number_of_players > 5:
-                number_of_players = None
-        return number_of_players
-
-
 class SingleMove:
     def __init__(self,  card: int, pile: int):
         self.card = card
@@ -61,15 +50,23 @@ class Direction(Enum):
 
 
 class DiscardPile:
-    def __init__(self, direction: Direction):
+
+    def __init__(self, direction: Direction, last: int):
         self.direction = direction
-        self.last = 1 if direction == Direction.INCREASING else 100
+        self.last = last
+
+    @staticmethod
+    def from_direction(direction: Direction):
+        return DiscardPile(direction, 1 if direction == Direction.INCREASING else 100)
 
     def __str__(self):
         return self.direction.name + " " + str(self.last)
 
     def __repr__(self):
         return str(self)
+
+    def play(self, card):
+        return DiscardPile(self.direction, card)
 
 
 class DiscardPileView:
@@ -119,6 +116,7 @@ class Game:
         assert len(legal_cards) == len(used_cards)
 
         # check cards are legal to play on pile
+
         print(move)
 
     def make_move(self, player: Player):
@@ -128,9 +126,10 @@ class Game:
     def __init__(self, players):
         self.players = players
 
-        self.discard_piles = [DiscardPile(Direction.INCREASING), DiscardPile(Direction.INCREASING),
-                              DiscardPile(Direction.DECREASING),
-                              DiscardPile(Direction.DECREASING)]
+        self.discard_piles = [DiscardPile.from_direction(Direction.INCREASING),
+                              DiscardPile.from_direction(Direction.INCREASING),
+                              DiscardPile.from_direction(Direction.DECREASING),
+                              DiscardPile.from_direction(Direction.DECREASING)]
 
         number_of_players = len(self.players)
 
