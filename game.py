@@ -49,6 +49,10 @@ class Direction(Enum):
     DECREASING = -1
 
 
+class IllegalPlay(BaseException):
+    pass
+
+
 class DiscardPile:
 
     def __init__(self, direction: Direction, last: int):
@@ -66,6 +70,8 @@ class DiscardPile:
         return str(self)
 
     def play(self, card):
+        if (card - self.last) / self.direction.value <= 0 and not abs(card - self.last) == 10:
+            raise IllegalPlay()
         return DiscardPile(self.direction, card)
 
 
